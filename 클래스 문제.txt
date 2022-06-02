@@ -1,0 +1,361 @@
+오븐
+
+1. 온도 설정
+2. 시간 설정
+3. 공간 설정
+4. 현재 설정 보기
+5. 조리 시작
+6. 종료
+
+
+1번 선택시	온도를 입력받고 온도 설정
+		온도 설정 이후
+		1. 온도 수정
+			+, -, s, i 를 입력받고(대,소문자 구분 x)
+
+			+ -> 1도 증가 (최대 300)
+			-  -> 1도 감소 (최저 100)
+			s  -> 종료
+			i  -> 온도를 새로 입력받음
+
+			+, - 입력시 1번 반복,
+			s, i 입력시 처음화면으로 되돌아가기
+
+		2. 종료
+			처음화면으로 되돌아가기
+
+2번 선택시
+	1. 시 입력
+		시 입력받아 설정 이후 2번으로 이동
+	2. 분 입력
+		분 입력받아 설정 이후 3번으로 이동
+	3. 초 입력
+		초 입력받아 설정
+	
+	이후 설정값 출력
+
+
+3번 선택시
+	1. 1단
+	2. 2단
+	3. 1단, 2단
+	선택받아서 설정
+
+4번 선택시	현재 설정되어 있는 값 출력
+		기본값
+		온도 : 180
+		시간 :  40초
+		공간 : 1단
+
+5번 선택시	조리완료
+		맛있게 드세요 출력
+
+6번 선택시 종료
+
+
+
+
+
+
+Main =======================
+
+
+
+
+import java.util.Scanner;
+
+public class Main {public static void main(String[] args) {
+	Test t = new Test();
+	OvenFunc oven = new OvenFunc();
+	TimerFunc tf = new TimerFunc();
+	int temp;
+	int select;
+	char a;
+	Scanner sc = new Scanner(System.in);
+	
+	while(true) {
+		System.out.println("1. 온도 설정");
+		System.out.println("2. 시간 설정");
+		System.out.println("3. 공간 설정");
+		System.out.println("4. 현재 설정 보기");
+		System.out.println("5. 조리 시작");
+		System.out.println("6. 종료");
+		System.out.print("선택 : ");
+		int cho=sc.nextInt();
+		switch(cho) {
+		case 1:
+			System.out.print("온도 : ");
+			temp = sc.nextInt();
+			oven.setTemp(temp);
+			oven.outTemp();
+			while(true) {
+				
+				System.out.println("1. 온도 수정");
+				System.out.println("2. 종료");
+				System.out.print("선택 : ");
+				int cho2=sc.nextInt();
+				if(cho2==1) {
+					
+						System.out.println("\t온도 조절"
+								+ "\n+\t-\tS(Stop)\tI(Input)");
+						a = sc.next().charAt(0);
+						
+						if(a == '+') {
+							if(oven.getTemp() < 300) {
+								oven.tempFunc('+');	
+							}else {
+								System.out.println("Error : 최고값");
+							}
+						}else if(a == '-') {
+							if(oven.getTemp()>100) {
+								oven.tempFunc('-');
+							}else {
+								System.out.println("Error : 최저값");
+							}
+							
+						}else if(a == 'S' || a == 's') {
+							oven.outTemp();
+							break;
+						}else if(a == 'I' || a == 'i'){
+							System.out.println("온도 : ");
+							temp = sc.nextInt();
+							oven.setTemp(temp);
+							oven.outTemp();
+							break;
+						}else {
+							System.out.println("Error");
+						}
+					}
+				else if(cho2==2) {
+					break;
+				}else {
+					System.out.println("잘못된 입력");
+				}
+			}
+			break;
+		case 2:
+			
+			System.out.println("1.시 입력");
+			System.out.println("2.분 입력");
+			System.out.println("3.초 입력");
+			select = sc.nextInt();
+			while(true) {
+				if(select == 1) {
+					tf.hour();
+					select++;
+					continue;
+				}else if(select == 2) {
+					tf.min();
+					select++;
+					continue;
+				}else if(select == 3) {
+					tf.sec();
+					
+				}else {
+					System.out.println("에러 발생");
+					continue;
+				}
+				
+				tf.print();
+				break;
+			}
+			
+			break;
+		case 3:
+			while(t.bool) {
+				t.select();
+				t.setting();
+			}
+			t.bool=true;
+			break;
+		case 4:
+			oven.outTemp();;
+			System.out.print("현재 시간 : ");
+			tf.print();
+			System.out.println("현재 공간 : "+t.getStr());
+			break;
+		case 5:
+			System.out.println("조리 완료");
+			System.out.println("맛있게 드세요~!");
+			break;
+		case 6:
+			System.exit(1);
+		default:
+			System.out.println("잘못된 입력");
+		}
+	}
+	
+}
+
+}
+
+
+
+
+
+
+
+OvenFunc ==================================
+
+
+
+
+
+
+
+
+public class OvenFunc {
+	private int temp=180;
+
+	public int getTemp() {
+		return temp;
+	}
+
+	public void setTemp(int temp) {
+		if(temp <= 300) {
+			this.temp = temp;
+			
+		}else {
+			System.out.println("최대 온도는 300℃ 입니다.");
+		}
+	}
+	
+	public void tempFunc(char pm) {
+		if(pm == '+') {
+			temp += 1;
+		}else {
+			temp -= 1;
+		}
+		outTemp();
+	}
+	public void outTemp() {
+		System.out.println("현재 온도 : "+temp+"℃");
+	}	
+}
+
+
+
+
+
+
+
+
+TimerFunc =====================================
+
+
+
+
+
+
+
+
+
+import java.util.Scanner;
+
+public class TimerFunc {
+	public int h, m, s=40;
+	
+	
+Scanner sc = new Scanner(System.in);
+public int hour() {
+	System.out.println("시간 입력");
+	h = sc.nextInt();
+	if(h <= 10) {
+		System.out.println(h+ "시간");
+	}else {
+		System.out.println("에러 발생");
+	}
+	return h;
+}
+	
+	public int min() {
+		System.out.println("분 입력");
+		m = sc.nextInt();
+		if(m <= 59) {
+			System.out.println(m+"분");
+		}else {
+			System.out.println("에러 발생");
+		}
+		return h;
+	}
+	public int sec() {
+		System.out.println("초 입력");
+		s = sc.nextInt();
+		if(s <= 59) {
+			System.out.println(s+"초");
+		}else {
+			System.out.println("에러 발생");
+		}
+		return s;
+	}
+	public void print() {
+		System.out.println(h+"시간 "+m+"분 "+s+"초");
+		
+		
+	}
+	
+	
+
+}
+
+
+
+
+
+
+
+
+Test =================================================
+
+
+
+
+
+
+
+
+
+
+
+
+import java.util.Scanner;
+
+public class Test {
+	private int sel;
+	private String str="1단";
+	public boolean bool=true;
+	public void select() {
+		Scanner input=new Scanner(System.in);
+		System.out.println("사용 위치 설정 (기본 1단)");
+		System.out.println("1. 1단");
+		System.out.println("2. 2단");
+		System.out.println("3. 모두");
+		System.out.print("입력 : ");
+		this.sel=input.nextInt();
+		
+	}
+	public void setting() {
+		if(this.sel==1) {
+			System.out.println("1단을 사용합니다.");
+			this.str="1단";
+			this.bool=false;
+		}else if(this.sel==2) {
+			System.out.println("2단을 사용합니다.");
+			this.str="2단";
+			this.bool=false;
+		}else if(this.sel==3) {
+			this.str="1단, 2단";
+			System.out.println("1단, 2단을 사용합니다.");
+			this.bool=false;
+		}else {
+			System.out.println("잘못된 입력입니다.");
+		}
+	}
+	public String getStr() {
+		return this.str;
+	}
+	
+}
+
+
+
